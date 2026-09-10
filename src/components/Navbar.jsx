@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
-    <nav className="w-full h-14 flex justify-between px-2 sm:px-20">
-      <Link className="flex items-center gap-1">
+    <nav className="w-full h-14 flex justify-between px-2 sm:px-20 border-b border-b-neutral-600/20">
+      <Link to="/" className="flex items-center gap-1">
         <Gamepad2 className="text-blue-500" />
         <h1 className="font-bold text-3xl">
           fun<span className="text-blue-500">NITE</span>

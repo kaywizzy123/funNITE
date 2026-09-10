@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 
 export default function App() {
   return (
-    <div className="bg-neutral-950 w-full h-screen text-white">
+    <div className="bg-neutral-950 w-full h-screen text-white flex flex-col">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
