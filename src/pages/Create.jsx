@@ -72,7 +72,7 @@ export default function Create() {
               <p className="text-neutral-500">
                 Number of Players: {players.length}
               </p>
-              <div className="w-full flex flex-col gap-2 max-h-144 overflow-auto">
+              <div className="w-full flex flex-col gap-2 max-h-144 overflow-auto scrollbar-none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 {players.map((player, index) => (
                   <PlayerDetails
                     key={player.id}
