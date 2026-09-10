@@ -22,6 +22,7 @@ export default function PlayerDetails({
   players,
   setPlayers,
   setErr,
+  avatar,
 }) {
   function handleDelete(id) {
     if (players.length === 3) {
@@ -36,7 +37,9 @@ export default function PlayerDetails({
   function handleChange(value) {
     setPlayers((prev) =>
       prev.map((player) =>
-        player.id === id ? { ...player, name: value } : player,
+        player.id === id
+          ? { ...player, name: value, avatar: value.charAt(0).toUpperCase() }
+          : player,
       ),
     );
   }
@@ -59,7 +62,7 @@ export default function PlayerDetails({
         placeholder={`Enter player ${count} name...`}
       />
       <div className="flex justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full ">
-        <User className="text-neutral-400" />
+        {name !== "" ? avatar : <User className="text-neutral-400" />}
       </div>
       <div
         onClick={() => handleDelete(id)}

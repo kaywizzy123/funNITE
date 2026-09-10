@@ -3,7 +3,6 @@ import { ChevronDown, Plus } from "lucide-react";
 import PlayerDetails from "../components/PlayerDetails";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { div } from "motion/react-client";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -52,6 +51,7 @@ export default function Create() {
         {
           id: crypto.randomUUID(),
           name: "",
+          avatar: "",
         },
       ];
     });
@@ -187,6 +187,7 @@ export default function Create() {
                           setPlayers={setPlayers}
                           players={players}
                           setErr={setErr}
+                          avatar={player.avatar}
                         />
                       </motion.div>
                     ))}
