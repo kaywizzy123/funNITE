@@ -10,10 +10,10 @@ export default function Create() {
   ];
   return (
     <div className="flex justify-center  flex-1 text-center mx-2 md:mx-0">
-      <div className="flex flex-col m-4 gap-4 items-center">
+      <div className="flex flex-col m-4 w-full gap-4 items-center">
         <h1 className="text-3xl md:text-5xl font-bold">Create New Game</h1>
-        <div className="flex flex-col">
-          <fieldset className="border border-neutral-50/6 bg-neutral-700/10 rounded-2xl md:w-lg">
+        <div className="flex flex-col w-full justify-center items-center">
+          <fieldset className="border border-neutral-50/6 bg-neutral-700/10 rounded-2xl w-full md:w-xl">
             <legend>Enter Players details</legend>
 
             <form className="flex flex-col gap-2 justify-center items-center m-5">
