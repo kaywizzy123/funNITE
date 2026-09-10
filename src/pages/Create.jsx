@@ -4,6 +4,8 @@ import PlayerDetails from "../components/PlayerDetails";
 import { Link } from "react-router-dom";
 
 export default function Create() {
+  const [gameName, setGameName] = useState("");
+
   const [err, setErr] = useState("");
   const [players, setPlayers] = useState([
     { id: crypto.randomUUID(), name: "" },
@@ -12,10 +14,11 @@ export default function Create() {
   ]);
 
   useEffect(() => {
+    console.log(players);
     if (!err) return;
     const timeout = setTimeout(() => setErr(""), 3000);
     return () => clearTimeout(timeout);
-  }, [err]);
+  }, [err, players]);
 
   function handleAdd() {
     setErr("");
@@ -77,6 +80,8 @@ export default function Create() {
                   Tournament name:{" "}
                 </label>
                 <input
+                  value={gameName}
+                  onChange={(e) => setGameName(e.target.value)}
                   className="flex-1 bg-neutral-700 rounded-full px-3 py-1.5 border border-neutral-500 outline-none"
                   placeholder="eg. Tim's birthday night clash..."
                 />
