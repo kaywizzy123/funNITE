@@ -11,7 +11,7 @@ const containerVariants = {
     opacity: 1,
     scale: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.25,
       when: "beforeChildren",
       staggerChildren: 0.15,
     },
@@ -136,7 +136,7 @@ export default function Create() {
                 </AnimatePresence>
                 <motion.div
                   layout
-                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
+                  transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
                   variants={containerVariants}
                 >
                   <motion.p
@@ -148,7 +148,7 @@ export default function Create() {
                 </motion.div>
                 <motion.div
                   layout
-                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
+                  transition={{ layout: { duration: 0.35, ease: "easeInOut" } }}
                   variants={containerVariants}
                   className="w-full flex justify-between gap-2 items-center p-2"
                 >
@@ -169,7 +169,7 @@ export default function Create() {
                 </motion.div>
                 <motion.div
                   layout
-                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
+                  transition={{ layout: { duration: 0.4, ease: "easeInOut" } }}
                   variants={containerVariants}
                   className="w-full flex flex-col py-2 gap-2 max-h-144 overflow-auto scrollbar-none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 >
