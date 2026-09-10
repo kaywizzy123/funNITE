@@ -68,7 +68,7 @@ export default function Home() {
           </motion.h2>
           <motion.h3
             variants={itemVariants}
-            className="text-2xl md:text-3xl text-neutral-500"
+            className="text-2xl md:text-3xl text-neutral-400"
           >
             Ditch the Paper. Track the Bragging Rights
           </motion.h3>
@@ -78,6 +78,12 @@ export default function Home() {
           >
             Generate Instant game fixtures, live round-robin pairings, and
             automatedd couch leaderboards for your local gaming nights
+          </motion.p>
+          <motion.p
+            variants={itemVariants}
+            className="text-sm md:text-md text-neutral-600"
+          >
+            Leave the planning to AI, Focus on the game and have fun.
           </motion.p>
           <motion.div variants={itemVariants}>
             <Link

@@ -1,4 +1,19 @@
 import { Minus, User } from "lucide-react";
+import { motion } from "motion/react";
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9,
+    transition: { duration: 0.3, ease: "easeIn" },
+  },
+};
 
 export default function PlayerDetails({
   id,
@@ -21,13 +36,18 @@ export default function PlayerDetails({
   function handleChange(value) {
     setPlayers((prev) =>
       prev.map((player) =>
-        player.id === id ? { ...player, name: value } : player
-      )
+        player.id === id ? { ...player, name: value } : player,
+      ),
     );
   }
 
   return (
-    <div className="flex justify-between items-center gap-2 w-full">
+    <motion.div
+      variants={itemVariants}
+      exit="exit"
+      layout
+      className="flex justify-between items-center gap-2 w-full"
+    >
       <p className="flex justify-center items-center w-8 h-8 text-neutral-600 text-lg">
         {count}.
       </p>
@@ -47,6 +67,6 @@ export default function PlayerDetails({
       >
         <Minus size={20} />
       </div>
-    </div>
+    </motion.div>
   );
 }
