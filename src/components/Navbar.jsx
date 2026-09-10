@@ -6,7 +6,7 @@ export default function Navbar() {
     <nav className="w-full h-14 flex justify-between px-2 sm:px-20 border-b border-b-neutral-600/20">
       <Link to="/" className="flex items-center gap-1">
         <Gamepad2 className="text-blue-500" />
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-3xl text-blue-200">
           fun<span className="text-blue-500">NITE</span>
         </h1>
       </Link>

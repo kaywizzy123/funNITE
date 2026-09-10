@@ -7,7 +7,7 @@ export default function Home() {
       <div className="flex flex-col justify-center items-center gap-4">
         <Gamepad2
           size={148}
-          className="text-blue-500 transition-all duration-300 hover:animate-bounce hover:text-blue-200"
+          className="text-blue-500 transition-all duration-300 hover:animate-spin hover:scale-110 hover:text-blue-200"
         />
         <h1 className="text-5xl md:text-7xl font-bold text-blue-500">
           Welcome to funNITE
