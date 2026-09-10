@@ -4,18 +4,9 @@ import { Link } from "react-router-dom";
 
 export default function Create() {
   const players = [
-    {
-      id: 1,
-      name: "Player 1",
-    },
-    {
-      id: 2,
-      name: "Player 2",
-    },
-    {
-      id: 3,
-      name: "Player 3",
-    },
+    { id: 1, name: "Player 1" },
+    { id: 2, name: "Player 2" },
+    { id: 3, name: "Player 3" },
   ];
   return (
     <div className="flex justify-center  flex-1 text-center mx-2 md:mx-0">
