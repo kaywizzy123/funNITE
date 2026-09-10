@@ -38,7 +38,7 @@ export default function Home() {
           <motion.div variants={itemVariants}>
             <motion.div
               animate={{
-                scale: [1, 1.4, 1.4, 1, 1],
+                scale: [1, 1.3, 1.3, 1, 1],
                 rotate: [0, 0, 180, 180, 0],
                 color: ["#93c5fd", "#3b82f6", "#3b82f6", "#93c5fd", "#93c5fd"],
               }}
