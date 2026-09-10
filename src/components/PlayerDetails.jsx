@@ -40,8 +40,16 @@ export default function PlayerDetails({
         player.id === id
           ? {
               ...player,
-              name: value.charAt(0).toUpperCase() + value.slice(1),
-              avatar: value.charAt(0).toUpperCase(),
+              name: value
+                .split(" ")
+                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                .join(" "),
+              avatar: (() => {
+                const words = value.trim().split(" ").filter(Boolean);
+                return words.length > 1
+                  ? words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
+                  : (words[0]?.charAt(0).toUpperCase() ?? "");
+              })(),
             }
           : player,
       ),
