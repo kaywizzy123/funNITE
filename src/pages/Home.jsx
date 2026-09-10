@@ -9,13 +9,12 @@ const containerVariants = {
     scale: 1,
     transition: {
       duration: 0.5,
-      when: "beforeChildren", // Ensures container animates in first
-      staggerChildren: 0.15, // Staggers the appearance of each child by 0.15s
+      when: "beforeChildren",
+      staggerChildren: 0.15,
     },
   },
 };
 
-// 2. Define variants for the children elements
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -81,7 +80,10 @@ export default function Home() {
             automatedd couch leaderboards for your local gaming nights
           </motion.p>
           <motion.div variants={itemVariants}>
-            <Link className="flex items-center gap-0.5 bg-blue-500 px-5 py-2.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <Link
+              to="/create"
+              className="flex items-center gap-0.5 bg-blue-500 px-15 py-3.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
+            >
               Get Started
             </Link>
           </motion.div>
