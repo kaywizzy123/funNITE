@@ -154,9 +154,9 @@ export default function Create() {
                   variants={containerVariants}
                   className="w-full flex flex-col py-2 gap-2 max-h-144 overflow-auto scrollbar-none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 >
-                  <AnimatePresence>
+                  <AnimatePresence mode="popLayout">
                     {players.map((player, index) => (
-                      <motion.div key={player.id} variants={containerVariants}>
+                      <motion.div key={player.id} layout variants={containerVariants}>
                         <PlayerDetails
                           id={player.id}
                           name={player.name}
