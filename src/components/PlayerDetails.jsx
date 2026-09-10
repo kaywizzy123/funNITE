@@ -38,7 +38,11 @@ export default function PlayerDetails({
     setPlayers((prev) =>
       prev.map((player) =>
         player.id === id
-          ? { ...player, name: value, avatar: value.charAt(0).toUpperCase() }
+          ? {
+              ...player,
+              name: value.charAt(0).toUpperCase() + value.slice(1),
+              avatar: value.charAt(0).toUpperCase(),
+            }
           : player,
       ),
     );

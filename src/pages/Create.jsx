@@ -114,7 +114,7 @@ export default function Create() {
                     <button
                       type="button"
                       onClick={handleAdd}
-                      className="bg-blue-500 rounded-full p-1 transition-all duration-300 hover:bg-blue-700 hover:scale-105 active:scale-95 cursor-pointer"
+                      className="bg-blue-500 rounded-full p-1 transition-all duration-300 hover:bg-blue-300 hover:scale-105 active:bg-blue-600 active:scale-95 cursor-pointer"
                     >
                       <Plus />
                     </button>
