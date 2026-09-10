@@ -72,6 +72,15 @@ export default function Create() {
               <p className="text-neutral-500">
                 Number of Players: {players.length}
               </p>
+              <div className="w-full flex justify-between gap-2 items-center p-2">
+                <label htmlFor="gameName" className="text-neutral-300">
+                  Tournament name:{" "}
+                </label>
+                <input
+                  className="flex-1 bg-neutral-700 rounded-full px-3 py-1.5 border border-neutral-500 outline-none"
+                  placeholder="eg. Tim's birthday night clash..."
+                />
+              </div>
               <div className="w-full flex flex-col py-2 gap-2 max-h-144 overflow-auto scrollbar-none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 {players.map((player, index) => (
                   <PlayerDetails
