@@ -120,10 +120,25 @@ export default function Create() {
                     </button>
                   </motion.div>
                 </motion.div>
-                <motion.p variants={itemVariants} className="text-red-400">
-                  {err}
-                </motion.p>
-                <motion.div variants={containerVariants}>
+                <AnimatePresence mode="popLayout">
+                  {err && (
+                    <motion.p
+                      key={err}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="text-red-400"
+                    >
+                      {err}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+                <motion.div
+                  layout
+                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
+                  variants={containerVariants}
+                >
                   <motion.p
                     variants={itemVariants}
                     className="text-neutral-500"
@@ -132,6 +147,8 @@ export default function Create() {
                   </motion.p>
                 </motion.div>
                 <motion.div
+                  layout
+                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
                   variants={containerVariants}
                   className="w-full flex justify-between gap-2 items-center p-2"
                 >
@@ -151,12 +168,18 @@ export default function Create() {
                   />
                 </motion.div>
                 <motion.div
+                  layout
+                  transition={{ layout: { duration: 0.6, ease: "easeInOut" } }}
                   variants={containerVariants}
                   className="w-full flex flex-col py-2 gap-2 max-h-144 overflow-auto scrollbar-none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
                 >
                   <AnimatePresence mode="popLayout">
                     {players.map((player, index) => (
-                      <motion.div key={player.id} layout variants={containerVariants}>
+                      <motion.div
+                        key={player.id}
+                        layout
+                        variants={containerVariants}
+                      >
                         <PlayerDetails
                           id={player.id}
                           name={player.name}

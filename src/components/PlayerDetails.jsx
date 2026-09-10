@@ -46,7 +46,7 @@ export default function PlayerDetails({
       variants={itemVariants}
       exit="exit"
       layout
-      className="flex justify-between items-center gap-2 w-full"
+      className="flex justify-between items-center gap-2 w-full px-0.5"
     >
       <p className="flex justify-center items-center w-8 h-8 text-neutral-600 text-lg">
         {count}.
