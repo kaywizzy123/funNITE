@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Create from "./pages/Create";
 import { useState } from "react";
 import { AppContext } from "./context/AppContext";
+import Fixtures from "./pages/Fixtures";
 
 export default function App() {
   const [gameName, setGameName] = useState("");
@@ -23,6 +24,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<Create />} />
+          <Route path="/fixtures" element={<Fixtures />} />
         </Routes>
       </div>
     </AppContext.Provider>
