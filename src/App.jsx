@@ -14,10 +14,20 @@ export default function App() {
     { id: crypto.randomUUID(), name: "" },
     { id: crypto.randomUUID(), name: "" },
   ]);
+  const [pairs, setPairs] = useState([]);
 
   return (
     <AppContext.Provider
-      value={{ gameName, setGameName, err, setErr, players, setPlayers }}
+      value={{
+        gameName,
+        setGameName,
+        err,
+        setErr,
+        players,
+        setPlayers,
+        pairs,
+        setPairs,
+      }}
     >
       <div className="bg-neutral-950 w-full min-h-screen text-white flex flex-col">
         <Navbar />

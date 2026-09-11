@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import { useState } from "react";
 import { User } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -12,12 +11,9 @@ const itemVariants = {
   },
 };
 
-export default function FixtureCard() {
-  const { gameName, setGameName, err, setErr, players, setPlayers } =
-    useContext(AppContext);
-
-  const [inputHome, setInputHome] = useState();
-  const [inputAway, setInputAway] = useState();
+export default function FixtureCard({ playerHome, playerAway }) {
+  const [inputHome, setInputHome] = useState("");
+  const [inputAway, setInputAway] = useState("");
 
   return (
     <motion.div
@@ -25,10 +21,21 @@ export default function FixtureCard() {
       className="flex flex-col sm:flex-row w-full gap-3 sm:gap-4 items-stretch sm:items-center bg-neutral-500/10 border border-neutral-500/30 rounded-2xl p-4 sm:p-4 transition-colors duration-300 hover:border-neutral-500/50"
     >
       <div className="flex flex-1 gap-3 items-center justify-center sm:justify-end bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2.5 px-4">
-        <p className="order-2 sm:order-1 font-medium truncate">Player 1</p>
-        <div className="order-1 sm:order-2 flex shrink-0 justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full">
-          <User className="text-neutral-400" size={18} />
-        </div>
+        {playerHome?.name === "Bye" ? (
+          <p className="order-2 sm:order-1 font-medium text-neutral-500 truncate">
+            {"-----------"}
+          </p>
+        ) : (
+          <p className="order-2 sm:order-1 font-medium truncate">
+            {playerHome?.name}
+          </p>
+        )}
+
+        {playerHome?.name !== "Bye" && (
+          <div className="order-1 sm:order-2 flex shrink-0 justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full">
+            {playerHome?.avatar}
+          </div>
+        )}
       </div>
 
       <div className="flex justify-center items-center gap-2 shrink-0 self-center bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2 px-3">
@@ -49,9 +56,9 @@ export default function FixtureCard() {
 
       <div className="flex flex-1 gap-3 items-center justify-center sm:justify-start bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2.5 px-4">
         <div className="flex shrink-0 justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full">
-          <User className="text-neutral-400" size={18} />
+          {playerAway?.avatar}
         </div>
-        <p className="font-medium truncate">Player 2</p>
+        <p className="font-medium truncate">{playerAway?.name}</p>
       </div>
     </motion.div>
   );

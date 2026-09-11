@@ -4,8 +4,7 @@ import { AppContext } from "../context/AppContext";
 import FixtureCard from "../components/FixtureCard";
 
 export default function Fixtures() {
-  const { gameName, setGameName, err, setErr, players, setPlayers } =
-    useContext(AppContext);
+  const { gameName, pairs } = useContext(AppContext);
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -48,26 +47,16 @@ export default function Fixtures() {
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
           >
-            <p className="font-bold text-blue-500 text-2xl">Semi Final</p>
-            <div className="flex justify-center items-center gap-2">
-              <p className="text-neutral-500">1.</p>
-              <FixtureCard />
-            </div>
-            <div className="flex justify-center items-center gap-2">
-              <p className="text-neutral-500">2.</p>
-              <FixtureCard />
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={itemVariants}
-            className="w-full border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
-          >
-            <p className="font-bold text-blue-500 text-2xl">Final</p>
-            <div className="flex justify-center items-center gap-2">
-              <p className="text-neutral-500">3.</p>
-              <FixtureCard />
-            </div>
+            <p className="font-bold text-blue-500 text-2xl">Fixtures</p>
+            {pairs.map(([playerHome, playerAway], index) => (
+              <div
+                key={playerHome.id}
+                className="flex justify-center items-center gap-2"
+              >
+                <p className="text-neutral-500">{index + 1}.</p>
+                <FixtureCard playerHome={playerHome} playerAway={playerAway} />
+              </div>
+            ))}
           </motion.div>
         </motion.div>
       </AnimatePresence>

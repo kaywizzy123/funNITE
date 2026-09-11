@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown, Plus, User } from "lucide-react";
 import PlayerDetails from "../components/PlayerDetails";
-import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { AppContext } from "../context/AppContext";
+import { Link } from "react-router-dom";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -28,7 +28,7 @@ const itemVariants = {
 };
 
 export default function Create() {
-  const { gameName, setGameName, err, setErr, players, setPlayers } =
+  const { gameName, setGameName, err, setErr, players, setPlayers, setPairs } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -50,6 +50,29 @@ export default function Create() {
         },
       ];
     });
+  }
+
+  function generateFixtures(players) {
+    const shuffled = [...players];
+
+    if (shuffled.length % 2 === 1) {
+      shuffled.push({
+        id: crypto.randomUUID(),
+        name: "Bye",
+        avatar: <User />,
+      });
+    }
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const newPairs = [];
+    for (let i = 0; i < shuffled.length; i += 2) {
+      newPairs.push([shuffled[i], shuffled[i + 1]]);
+    }
+    setPairs(newPairs);
   }
 
   return (
@@ -191,6 +214,7 @@ export default function Create() {
           <motion.div layout variants={itemVariants}>
             <AnimatePresence>
               <Link
+                onClick={() => generateFixtures(players)}
                 to="/fixtures"
                 className="flex items-center justify-center gap-0.5 bg-blue-500 px-10 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
               >
