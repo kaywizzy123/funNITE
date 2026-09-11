@@ -36,7 +36,7 @@ export default function Create() {
     if (!err) return;
     const timeout = setTimeout(() => setErr(""), 3000);
     return () => clearTimeout(timeout);
-  }, [err, players]);
+  }, [err, setErr, players]);
 
   function handleAdd() {
     setErr("");
