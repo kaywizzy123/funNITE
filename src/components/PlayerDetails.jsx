@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { Minus, User } from "lucide-react";
 import { motion } from "motion/react";
+import { AppContext } from "../context/AppContext";
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -15,15 +17,9 @@ const itemVariants = {
   },
 };
 
-export default function PlayerDetails({
-  id,
-  name,
-  count,
-  players,
-  setPlayers,
-  setErr,
-  avatar,
-}) {
+export default function PlayerDetails({ id, name, count, avatar }) {
+  const { players, setPlayers, setErr } = useContext(AppContext);
+
   function handleDelete(id) {
     if (players.length === 3) {
       setErr("You can't create a fixtures with less than 3 players");

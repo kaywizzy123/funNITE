@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"; // 1. Import useState
+import { useContext, useEffect } from "react";
 import { ChevronDown, Plus } from "lucide-react";
 import PlayerDetails from "../components/PlayerDetails";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { AppContext } from "../context/AppContext";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -27,14 +28,8 @@ const itemVariants = {
 };
 
 export default function Create() {
-  const [gameName, setGameName] = useState("");
-
-  const [err, setErr] = useState("");
-  const [players, setPlayers] = useState([
-    { id: crypto.randomUUID(), name: "" },
-    { id: crypto.randomUUID(), name: "" },
-    { id: crypto.randomUUID(), name: "" },
-  ]);
+  const { gameName, setGameName, err, setErr, players, setPlayers } =
+    useContext(AppContext);
 
   useEffect(() => {
     console.log(players);
@@ -184,9 +179,6 @@ export default function Create() {
                           id={player.id}
                           name={player.name}
                           count={index + 1}
-                          setPlayers={setPlayers}
-                          players={players}
-                          setErr={setErr}
                           avatar={player.avatar}
                         />
                       </motion.div>
