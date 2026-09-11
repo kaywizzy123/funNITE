@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { User } from "lucide-react";
 import { motion } from "motion/react";
 
 const itemVariants = {
@@ -55,10 +54,21 @@ export default function FixtureCard({ playerHome, playerAway }) {
       </div>
 
       <div className="flex flex-1 gap-3 items-center justify-center sm:justify-start bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2.5 px-4">
-        <div className="flex shrink-0 justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full">
-          {playerAway?.avatar}
-        </div>
-        <p className="font-medium truncate">{playerAway?.name}</p>
+        {playerAway?.name === "Bye" ? (
+          <p className="order-2 sm:order-1 font-medium text-neutral-500 truncate">
+            {"-----------"}
+          </p>
+        ) : (
+          <p className="order-2 sm:order-1 font-medium truncate">
+            {playerAway?.name}
+          </p>
+        )}
+
+        {playerAway?.name !== "Bye" && (
+          <div className="order-1 sm:order-2 flex shrink-0 justify-center items-center w-10 h-10 bg-neutral-300/30 border border-neutral-400/70 rounded-full">
+            {playerAway?.avatar}
+          </div>
+        )}
       </div>
     </motion.div>
   );
