@@ -22,7 +22,7 @@ export default function PlayerDetails({ id, name, count, avatar }) {
 
   function handleDelete(id) {
     if (players.length === 3) {
-      setErr("You can't create a fixtures with less than 3 players");
+      setErr("You can't create a tournament with less than 3 players");
       return null;
     }
 
@@ -43,7 +43,8 @@ export default function PlayerDetails({ id, name, count, avatar }) {
               avatar: (() => {
                 const words = value.trim().split(" ").filter(Boolean);
                 return words.length > 1
-                  ? words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase()
+                  ? words[0].charAt(0).toUpperCase() +
+                      words[1].charAt(0).toUpperCase()
                   : (words[0]?.charAt(0).toUpperCase() ?? "");
               })(),
             }
