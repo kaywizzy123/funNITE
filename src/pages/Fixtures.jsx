@@ -43,11 +43,30 @@ export default function Fixtures() {
           >
             {gameName !== "" ? `${gameName}` : "Test Tournament"}
           </motion.h1>
+          <motion.h2
+            variants={itemVariants}
+            className="text-2xl text-blue-500 font-bold"
+          >
+            Fixtures
+          </motion.h2>
           <motion.div
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
           >
-            <p className="font-bold text-blue-500 text-2xl">Fixtures</p>
+            {pairs.length === 2 ? (
+              <p className="font-semibold text-blue-500 text-2xl">Semifinal</p>
+            ) : pairs.length === 1 ? (
+              <p className="font-semibold text-blue-500 text-2xl">Final</p>
+            ) : pairs.length <= 4 ? (
+              <p className="font-semibold text-blue-500 text-2xl">
+                Quarter Final
+              </p>
+            ) : (
+              <p className="font-semibold text-blue-500 text-2xl">
+                Round of {pairs.length * 2}
+              </p>
+            )}
+
             {pairs.map(([playerHome, playerAway], index) => (
               <div
                 key={playerHome.id}

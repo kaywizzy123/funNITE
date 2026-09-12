@@ -28,8 +28,16 @@ const itemVariants = {
 };
 
 export default function Create() {
-  const { gameName, setGameName, err, setErr, players, setPlayers, setPairs } =
-    useContext(AppContext);
+  const {
+    gameName,
+    setGameName,
+    err,
+    setErr,
+    players,
+    setPlayers,
+    pairs,
+    setPairs,
+  } = useContext(AppContext);
 
   useEffect(() => {
     console.log(players);
