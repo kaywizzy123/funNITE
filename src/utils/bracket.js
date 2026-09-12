@@ -1,27 +1,9 @@
+import { shuffle, createMatch } from "./matchHelpers";
+
 function nextPowerOfTwo(n) {
   let p = 1;
   while (p < n) p *= 2;
   return p;
-}
-
-function shuffle(items) {
-  const shuffled = [...items];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-function createMatch(playerHome = null, playerAway = null, winner = null) {
-  return {
-    id: crypto.randomUUID(),
-    playerHome,
-    playerAway,
-    scoreHome: null,
-    scoreAway: null,
-    winner,
-  };
 }
 
 function placeWinner(rounds, roundIndex, matchIndex, winner) {

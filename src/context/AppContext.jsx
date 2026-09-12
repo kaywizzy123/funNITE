@@ -13,16 +13,35 @@ export function AppProvider({ children }) {
     { id: crypto.randomUUID(), name: "" },
   ]);
   const [rounds, setRounds] = useState([]);
+  const [format, setFormat] = useState("knockout");
+  const [mode, setMode] = useState("single");
 
   function submitMatchResult(roundIndex, matchIndex, scoreHome, scoreAway) {
-    if (scoreHome === scoreAway) return;
+    if (format !== "league") {
+      if (scoreHome === scoreAway) return;
+
+      setRounds((prevRounds) => {
+        const match = prevRounds[roundIndex][matchIndex];
+        const winner = scoreHome > scoreAway ? match.playerHome : match.playerAway;
+        const nextRounds = advanceWinner(prevRounds, roundIndex, matchIndex, winner);
+        nextRounds[roundIndex][matchIndex].scoreHome = scoreHome;
+        nextRounds[roundIndex][matchIndex].scoreAway = scoreAway;
+        return nextRounds;
+      });
+      return;
+    }
 
     setRounds((prevRounds) => {
-      const match = prevRounds[roundIndex][matchIndex];
-      const winner = scoreHome > scoreAway ? match.playerHome : match.playerAway;
-      const nextRounds = advanceWinner(prevRounds, roundIndex, matchIndex, winner);
-      nextRounds[roundIndex][matchIndex].scoreHome = scoreHome;
-      nextRounds[roundIndex][matchIndex].scoreAway = scoreAway;
+      const nextRounds = prevRounds.map((round) => round.map((m) => ({ ...m })));
+      const match = nextRounds[roundIndex][matchIndex];
+      match.scoreHome = scoreHome;
+      match.scoreAway = scoreAway;
+      match.winner =
+        scoreHome === scoreAway
+          ? null
+          : scoreHome > scoreAway
+            ? match.playerHome
+            : match.playerAway;
       return nextRounds;
     });
   }
@@ -38,6 +57,10 @@ export function AppProvider({ children }) {
         setPlayers,
         rounds,
         setRounds,
+        format,
+        setFormat,
+        mode,
+        setMode,
         submitMatchResult,
       }}
     >

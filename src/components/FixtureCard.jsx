@@ -17,6 +17,7 @@ export default function FixtureCard({
   scoreHome,
   scoreAway,
   onSubmit,
+  allowTies = false,
 }) {
   const [inputHome, setInputHome] = useState(scoreHome ?? "");
   const [inputAway, setInputAway] = useState(scoreAway ?? "");
@@ -25,7 +26,7 @@ export default function FixtureCard({
 
   function handleSubmit() {
     if (inputHome === "" || inputAway === "") return;
-    if (Number(inputHome) === Number(inputAway)) {
+    if (!allowTies && Number(inputHome) === Number(inputAway)) {
       setTied(true);
       return;
     }

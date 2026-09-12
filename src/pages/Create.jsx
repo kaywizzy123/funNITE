@@ -4,6 +4,7 @@ import PlayerDetails from "../components/PlayerDetails";
 import { AnimatePresence, motion } from "motion/react";
 import { AppContext } from "../context/AppContext";
 import { generateBracket } from "../utils/bracket";
+import { generateRoundRobin } from "../utils/roundRobin";
 import { Link } from "react-router-dom";
 
 const containerVariants = {
@@ -37,10 +38,13 @@ export default function Create() {
     players,
     setPlayers,
     setRounds,
+    format,
+    setFormat,
+    mode,
+    setMode,
   } = useContext(AppContext);
 
   useEffect(() => {
-    console.log(players);
     if (!err) return;
     const timeout = setTimeout(() => setErr(""), 3000);
     return () => clearTimeout(timeout);
@@ -60,8 +64,17 @@ export default function Create() {
     });
   }
 
-  function generateFixtures(players) {
-    setRounds(generateBracket(players));
+  function generateFixtures(event, players) {
+    if (players.some((player) => player.name.trim() === "")) {
+      event.preventDefault();
+      setErr("Please enter a name for every player");
+      return;
+    }
+    if (format === "league") {
+      setRounds(generateRoundRobin(players, mode === "home_away"));
+    } else {
+      setRounds(generateBracket(players));
+    }
   }
 
   return (
@@ -95,7 +108,11 @@ export default function Create() {
                     variants={itemVariants}
                     className="relative w-full max-w-xs"
                   >
-                    <select className="w-full appearance-none rounded-full bg-blue-500 px-4 py-2.5 pr-10 text-sm text-neutral-50 shadow-sm transition-all focus:border-none focus:outline-none focus:ring-0 focus:ring-indigo-100">
+                    <select
+                      value={format}
+                      onChange={(e) => setFormat(e.target.value)}
+                      className="w-full appearance-none rounded-full bg-blue-500 px-4 py-2.5 pr-10 text-sm text-neutral-50 shadow-sm transition-all focus:border-none focus:outline-none focus:ring-0 focus:ring-indigo-100"
+                    >
                       <option value="knockout">Knockout</option>
                       <option value="league">League</option>
                     </select>
@@ -108,7 +125,11 @@ export default function Create() {
                     variants={itemVariants}
                     className="relative w-full max-w-xs"
                   >
-                    <select className="w-full appearance-none rounded-full bg-blue-500 px-4 py-2.5 pr-10 text-sm text-neutral-50 shadow-sm transition-all focus:border-none focus:outline-none focus:ring-0 focus:ring-indigo-100">
+                    <select
+                      value={mode}
+                      onChange={(e) => setMode(e.target.value)}
+                      className="w-full appearance-none rounded-full bg-blue-500 px-4 py-2.5 pr-10 text-sm text-neutral-50 shadow-sm transition-all focus:border-none focus:outline-none focus:ring-0 focus:ring-indigo-100"
+                    >
                       <option value="single">Single</option>
                       <option value="home_away">Home & Away</option>
                     </select>
@@ -203,7 +224,7 @@ export default function Create() {
           <motion.div layout variants={itemVariants}>
             <AnimatePresence>
               <Link
-                onClick={() => generateFixtures(players)}
+                onClick={(e) => generateFixtures(e, players)}
                 to="/fixtures"
                 className="flex items-center justify-center gap-0.5 bg-blue-500 px-10 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
               >

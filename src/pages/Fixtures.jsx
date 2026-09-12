@@ -2,11 +2,21 @@ import { motion, AnimatePresence } from "motion/react";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { getRoundLabel } from "../utils/bracket";
+import { getMatchdayLabel } from "../utils/roundRobin";
+import { computeStandings, isLeagueComplete } from "../utils/standings";
 import FixtureCard from "../components/FixtureCard";
+import StandingsTable from "../components/StandingsTable";
 
 export default function Fixtures() {
-  const { gameName, rounds, submitMatchResult } = useContext(AppContext);
+  const { gameName, rounds, submitMatchResult, format } = useContext(AppContext);
+  const isLeague = format === "league";
   const finalMatch = rounds.at(-1)?.[0];
+  const standings = isLeague ? computeStandings(rounds) : [];
+  const champion = isLeague
+    ? isLeagueComplete(rounds)
+      ? standings[0]?.player
+      : null
+    : finalMatch?.winner;
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -55,11 +65,13 @@ export default function Fixtures() {
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
           >
-            {finalMatch?.winner && (
+            {champion && (
               <p className="font-semibold text-yellow-400 text-2xl">
-                🏆 Champion: {finalMatch.winner.name}
+                🏆 Champion: {champion.name}
               </p>
             )}
+
+            {isLeague && <StandingsTable standings={standings} />}
 
             {rounds.map((round, roundIndex) => (
               <div
@@ -67,7 +79,7 @@ export default function Fixtures() {
                 className="flex flex-col bg-neutral-700/10 gap-2 p-4 rounded-2xl"
               >
                 <p className="font-semibold text-blue-500 text-2xl">
-                  {getRoundLabel(round.length)}
+                  {isLeague ? getMatchdayLabel(roundIndex) : getRoundLabel(round.length)}
                 </p>
 
                 {round.map((match, matchIndex) => (
@@ -81,6 +93,7 @@ export default function Fixtures() {
                       playerAway={match.playerAway}
                       scoreHome={match.scoreHome}
                       scoreAway={match.scoreAway}
+                      allowTies={isLeague}
                       onSubmit={(scoreHome, scoreAway) =>
                         submitMatchResult(
                           roundIndex,
