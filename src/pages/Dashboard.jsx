@@ -4,7 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Plus, Trash2, Trophy } from "lucide-react";
 import { AppContext } from "../context/AppContext";
 import { loadTournaments } from "../utils/storage";
-import { getTournamentChampion, getTournamentStatus } from "../utils/tournamentStatus";
+import {
+  getTournamentChampion,
+  getTournamentStatus,
+} from "../utils/tournamentStatus";
 import { containerVariants, itemVariants } from "../utils/motionVariants";
 
 const STATUS_LABEL = {
@@ -21,7 +24,10 @@ const STATUS_STYLE = {
 
 function formatDate(iso) {
   if (!iso) return "";
-  return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
 }
 
 export default function Dashboard() {
@@ -31,7 +37,10 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   const sorted = useMemo(
-    () => [...tournaments].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)),
+    () =>
+      [...tournaments].sort(
+        (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
+      ),
     [tournaments],
   );
 
@@ -42,7 +51,9 @@ export default function Dashboard() {
 
   function handleOpen(tournament) {
     loadTournament(tournament);
-    navigate(getTournamentStatus(tournament) === "draft" ? "/create" : "/fixtures");
+    navigate(
+      getTournamentStatus(tournament) === "draft" ? "/create" : "/fixtures",
+    );
   }
 
   function handleDelete(event, id) {
@@ -59,6 +70,7 @@ export default function Dashboard() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
+          layout
           className="flex flex-col m-4 w-full md:w-5xl gap-4 items-center"
         >
           <motion.div
@@ -101,7 +113,9 @@ export default function Dashboard() {
                 {sorted.map((tournament) => {
                   const status = getTournamentStatus(tournament);
                   const champion =
-                    status === "completed" ? getTournamentChampion(tournament) : null;
+                    status === "completed"
+                      ? getTournamentChampion(tournament)
+                      : null;
                   return (
                     <motion.div
                       key={tournament.id}
@@ -121,8 +135,8 @@ export default function Dashboard() {
                         </span>
                       </div>
                       <p className="text-sm text-neutral-400">
-                        {tournament.format === "league" ? "League" : "Knockout"} ·{" "}
-                        {tournament.players?.length ?? 0} players
+                        {tournament.format === "league" ? "League" : "Knockout"}{" "}
+                        · {tournament.players?.length ?? 0} players
                       </p>
                       {champion && (
                         <p className="text-sm text-yellow-400 flex items-center gap-1">

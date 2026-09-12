@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Check, Pencil, X } from "lucide-react";
 import { AppContext } from "../context/AppContext";
 import { getRoundLabel } from "../utils/bracket";
 import { getMatchdayLabel } from "../utils/roundRobin";
@@ -13,6 +14,7 @@ import StandingsTable from "../components/StandingsTable";
 export default function Fixtures() {
   const {
     gameName,
+    setGameName,
     rounds,
     submitMatchResult,
     format,
@@ -24,6 +26,23 @@ export default function Fixtures() {
   const standings = isLeague ? computeStandings(rounds) : [];
   const champion = getTournamentChampion({ format, rounds });
 
+  const [editingName, setEditingName] = useState(false);
+  const [nameDraft, setNameDraft] = useState(gameName);
+
+  function startEditingName() {
+    setNameDraft(gameName);
+    setEditingName(true);
+  }
+
+  function commitName() {
+    setGameName(nameDraft.trim());
+    setEditingName(false);
+  }
+
+  function cancelEditingName() {
+    setEditingName(false);
+  }
+
   return (
     <div className="flex justify-center flex-1 text-center mx-2 md:mx-0">
       <AnimatePresence>
@@ -33,12 +52,56 @@ export default function Fixtures() {
           animate="visible"
           className="flex flex-col m-4 w-full md:w-5xl gap-4 items-center"
         >
-          <motion.h1
-            variants={itemVariants}
-            className="text-3xl md:text-5xl font-bold"
-          >
-            {gameName !== "" ? `${gameName}` : "Test Tournament"}
-          </motion.h1>
+          {editingName ? (
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-2"
+            >
+              <input
+                autoFocus
+                value={nameDraft}
+                onChange={(e) => setNameDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") commitName();
+                  if (e.key === "Escape") cancelEditingName();
+                }}
+                className="text-3xl md:text-5xl font-bold bg-transparent border-b border-blue-500 outline-none text-center max-w-full"
+              />
+              <button
+                type="button"
+                onClick={commitName}
+                className="text-blue-400 hover:text-blue-300 transition-colors"
+                aria-label="Save tournament name"
+              >
+                <Check size={22} />
+              </button>
+              <button
+                type="button"
+                onClick={cancelEditingName}
+                className="text-neutral-500 hover:text-neutral-300 transition-colors"
+                aria-label="Cancel editing tournament name"
+              >
+                <X size={22} />
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-2 group"
+            >
+              <h1 className="text-3xl md:text-5xl font-bold">
+                {gameName !== "" ? gameName : "Test Tournament"}
+              </h1>
+              <button
+                type="button"
+                onClick={startEditingName}
+                className="text-neutral-500 hover:text-white transition-colors"
+                aria-label="Edit tournament name"
+              >
+                <Pencil size={18} />
+              </button>
+            </motion.div>
+          )}
           <motion.h2
             variants={itemVariants}
             className="text-2xl text-blue-500 font-bold"
