@@ -1,7 +1,12 @@
+import { useContext } from "react";
 import { Gamepad2, Plus } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 export default function Navbar() {
+  const { requestReset } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return (
     <nav className="w-full h-14 flex justify-between px-2 sm:px-20 border-b border-b-neutral-600/20">
       <Link to="/" className="flex items-center gap-1">
@@ -14,6 +19,10 @@ export default function Navbar() {
       <div className="flex items-center">
         <Link
           to="/create"
+          onClick={(e) => {
+            e.preventDefault();
+            requestReset(() => navigate("/create"));
+          }}
           className="flex items-center gap-0.5 bg-blue-500 px-2 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95"
         >
           <Plus size={16} />

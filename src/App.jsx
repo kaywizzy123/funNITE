@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Create from "./pages/Create";
 import { AppProvider } from "./context/AppContext";
 import Fixtures from "./pages/Fixtures";
+import ResetConfirmModal from "./components/ResetConfirmModal";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/fixtures" element={<Fixtures />} />
         </Routes>
+        <ResetConfirmModal />
       </div>
     </AppProvider>
   );

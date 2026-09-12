@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { getRoundLabel } from "../utils/bracket";
 import { getMatchdayLabel } from "../utils/roundRobin";
@@ -8,7 +9,9 @@ import FixtureCard from "../components/FixtureCard";
 import StandingsTable from "../components/StandingsTable";
 
 export default function Fixtures() {
-  const { gameName, rounds, submitMatchResult, format } = useContext(AppContext);
+  const { gameName, rounds, submitMatchResult, format, requestReset } =
+    useContext(AppContext);
+  const navigate = useNavigate();
   const isLeague = format === "league";
   const finalMatch = rounds.at(-1)?.[0];
   const standings = isLeague ? computeStandings(rounds) : [];
@@ -61,6 +64,14 @@ export default function Fixtures() {
           >
             Fixtures
           </motion.h2>
+          <motion.button
+            variants={itemVariants}
+            type="button"
+            onClick={() => requestReset(() => navigate("/create"))}
+            className="text-sm text-red-400 hover:text-red-300 transition-colors"
+          >
+            Reset Tournament
+          </motion.button>
           <motion.div
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"

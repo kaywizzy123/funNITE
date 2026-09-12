@@ -1,6 +1,8 @@
+import { useContext } from "react";
 import { Gamepad2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { AppContext } from "../context/AppContext";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -25,6 +27,9 @@ const itemVariants = {
 };
 
 export default function Home() {
+  const { requestReset } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center flex-1 text-center mx-2 md:mx-0">
       <AnimatePresence>
@@ -88,6 +93,10 @@ export default function Home() {
           <motion.div variants={itemVariants}>
             <Link
               to="/create"
+              onClick={(e) => {
+                e.preventDefault();
+                requestReset(() => navigate("/create"));
+              }}
               className="flex items-center gap-0.5 bg-blue-500 px-15 py-3.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
             >
               Get Started

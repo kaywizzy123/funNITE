@@ -1,20 +1,31 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { advanceWinner } from "../utils/bracket";
+import { loadTournamentState, saveTournamentState } from "../utils/storage";
 
 // eslint-disable-next-line react-refresh/only-export-components -- context + provider kept together on purpose
 export const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const [gameName, setGameName] = useState("");
+  const persisted = loadTournamentState();
+
+  const [gameName, setGameName] = useState(persisted?.gameName ?? "");
   const [err, setErr] = useState("");
-  const [players, setPlayers] = useState([
-    { id: crypto.randomUUID(), name: "" },
-    { id: crypto.randomUUID(), name: "" },
-    { id: crypto.randomUUID(), name: "" },
-  ]);
-  const [rounds, setRounds] = useState([]);
-  const [format, setFormat] = useState("knockout");
-  const [mode, setMode] = useState("single");
+  const [players, setPlayers] = useState(
+    persisted?.players ?? [
+      { id: crypto.randomUUID(), name: "" },
+      { id: crypto.randomUUID(), name: "" },
+      { id: crypto.randomUUID(), name: "" },
+    ],
+  );
+  const [rounds, setRounds] = useState(persisted?.rounds ?? []);
+  const [format, setFormat] = useState(persisted?.format ?? "knockout");
+  const [mode, setMode] = useState(persisted?.mode ?? "single");
+  const [resetModalOpen, setResetModalOpen] = useState(false);
+  const pendingResetRef = useRef(null);
+
+  useEffect(() => {
+    saveTournamentState({ gameName, players, rounds, format, mode });
+  }, [gameName, players, rounds, format, mode]);
 
   function submitMatchResult(roundIndex, matchIndex, scoreHome, scoreAway) {
     if (format !== "league") {
@@ -46,6 +57,40 @@ export function AppProvider({ children }) {
     });
   }
 
+  function resetTournament() {
+    setGameName("");
+    setPlayers([
+      { id: crypto.randomUUID(), name: "" },
+      { id: crypto.randomUUID(), name: "" },
+      { id: crypto.randomUUID(), name: "" },
+    ]);
+    setRounds([]);
+    setFormat("knockout");
+    setMode("single");
+  }
+
+  function requestReset(onConfirmed) {
+    if (rounds.length === 0) {
+      resetTournament();
+      onConfirmed?.();
+      return;
+    }
+    pendingResetRef.current = onConfirmed;
+    setResetModalOpen(true);
+  }
+
+  function confirmResetModal() {
+    resetTournament();
+    setResetModalOpen(false);
+    pendingResetRef.current?.();
+    pendingResetRef.current = null;
+  }
+
+  function cancelResetModal() {
+    setResetModalOpen(false);
+    pendingResetRef.current = null;
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -62,6 +107,10 @@ export function AppProvider({ children }) {
         mode,
         setMode,
         submitMatchResult,
+        requestReset,
+        resetModalOpen,
+        confirmResetModal,
+        cancelResetModal,
       }}
     >
       {children}
