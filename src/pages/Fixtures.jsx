@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { getRoundLabel } from "../utils/bracket";
 import FixtureCard from "../components/FixtureCard";
 
 export default function Fixtures() {
-  const { gameName, pairs } = useContext(AppContext);
+  const { gameName, rounds, submitMatchResult } = useContext(AppContext);
+  const finalMatch = rounds.at(-1)?.[0];
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -53,27 +55,43 @@ export default function Fixtures() {
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
           >
-            {pairs.length === 2 ? (
-              <p className="font-semibold text-blue-500 text-2xl">Semifinal</p>
-            ) : pairs.length === 1 ? (
-              <p className="font-semibold text-blue-500 text-2xl">Final</p>
-            ) : pairs.length <= 4 ? (
-              <p className="font-semibold text-blue-500 text-2xl">
-                Quarter Final
-              </p>
-            ) : (
-              <p className="font-semibold text-blue-500 text-2xl">
-                Round of {pairs.length * 2}
+            {finalMatch?.winner && (
+              <p className="font-semibold text-yellow-400 text-2xl">
+                🏆 Champion: {finalMatch.winner.name}
               </p>
             )}
 
-            {pairs.map(([playerHome, playerAway], index) => (
+            {rounds.map((round, roundIndex) => (
               <div
-                key={playerHome.id}
-                className="flex justify-center items-center gap-2"
+                key={roundIndex}
+                className="flex flex-col bg-neutral-700/10 gap-2 p-4 rounded-2xl"
               >
-                <p className="text-neutral-500">{index + 1}.</p>
-                <FixtureCard playerHome={playerHome} playerAway={playerAway} />
+                <p className="font-semibold text-blue-500 text-2xl">
+                  {getRoundLabel(round.length)}
+                </p>
+
+                {round.map((match, matchIndex) => (
+                  <div
+                    key={match.id}
+                    className="flex justify-center items-center gap-2"
+                  >
+                    <p className="text-neutral-500">{matchIndex + 1}.</p>
+                    <FixtureCard
+                      playerHome={match.playerHome}
+                      playerAway={match.playerAway}
+                      scoreHome={match.scoreHome}
+                      scoreAway={match.scoreAway}
+                      onSubmit={(scoreHome, scoreAway) =>
+                        submitMatchResult(
+                          roundIndex,
+                          matchIndex,
+                          scoreHome,
+                          scoreAway,
+                        )
+                      }
+                    />
+                  </div>
+                ))}
               </div>
             ))}
           </motion.div>

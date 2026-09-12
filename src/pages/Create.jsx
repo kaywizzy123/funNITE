@@ -1,8 +1,9 @@
 import { useContext, useEffect } from "react";
-import { ChevronDown, Plus, User } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import PlayerDetails from "../components/PlayerDetails";
 import { AnimatePresence, motion } from "motion/react";
 import { AppContext } from "../context/AppContext";
+import { generateBracket } from "../utils/bracket";
 import { Link } from "react-router-dom";
 
 const containerVariants = {
@@ -35,8 +36,7 @@ export default function Create() {
     setErr,
     players,
     setPlayers,
-    pairs,
-    setPairs,
+    setRounds,
   } = useContext(AppContext);
 
   useEffect(() => {
@@ -61,26 +61,7 @@ export default function Create() {
   }
 
   function generateFixtures(players) {
-    const shuffled = [...players];
-
-    if (shuffled.length % 2 === 1) {
-      shuffled.push({
-        id: crypto.randomUUID(),
-        name: "Bye",
-        avatar: <User />,
-      });
-    }
-
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    const newPairs = [];
-    for (let i = 0; i < shuffled.length; i += 2) {
-      newPairs.push([shuffled[i], shuffled[i + 1]]);
-    }
-    setPairs(newPairs);
+    setRounds(generateBracket(players));
   }
 
   return (
