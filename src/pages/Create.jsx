@@ -29,6 +29,13 @@ export default function Create() {
     return () => clearTimeout(timeout);
   }, [err, setErr, players]);
 
+  // err lives in shared AppContext, so it outlives this page unless we
+  // clear it on unmount — otherwise navigating away before the 3s
+  // auto-dismiss fires leaves a stale error waiting on return.
+  useEffect(() => {
+    return () => setErr("");
+  }, [setErr]);
+
   function handleAdd() {
     setErr("");
     setPlayers((prevPlayers) => {

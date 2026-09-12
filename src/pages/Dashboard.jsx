@@ -10,6 +10,16 @@ import {
 } from "../utils/tournamentStatus";
 import { containerVariants, itemVariants } from "../utils/motionVariants";
 
+// Orchestrates the card stagger only — no opacity/scale of its own, so
+// cards don't have to wait through a second "container" fade-in stage
+// on top of the page-level one before they start appearing.
+const listVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
 const STATUS_LABEL = {
   draft: "Draft",
   in_progress: "In Progress",
@@ -70,7 +80,6 @@ export default function Dashboard() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          layout
           className="flex flex-col m-4 w-full md:w-5xl gap-4 items-center"
         >
           <motion.div
@@ -106,7 +115,9 @@ export default function Dashboard() {
             </motion.div>
           ) : (
             <motion.div
-              variants={containerVariants}
+              layout
+              transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+              variants={listVariants}
               className="w-full grid grid-cols-1 md:grid-cols-2 gap-4"
             >
               <AnimatePresence mode="popLayout">
@@ -120,9 +131,10 @@ export default function Dashboard() {
                     <motion.div
                       key={tournament.id}
                       layout
+                      transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
                       variants={itemVariants}
                       onClick={() => handleOpen(tournament)}
-                      className="text-left cursor-pointer bg-neutral-700/10 border border-neutral-500/20 rounded-2xl p-4 flex flex-col gap-2 transition-all duration-300 hover:border-blue-500/50"
+                      className="text-left cursor-pointer bg-neutral-700/10 border border-neutral-500/20 rounded-2xl p-4 flex flex-col gap-2 transition-colors duration-300 hover:border-blue-500/50"
                     >
                       <div className="flex justify-between items-start gap-2">
                         <h3 className="font-semibold text-lg">
