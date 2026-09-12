@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { Gamepad2, Plus } from "lucide-react";
+import { Gamepad2, LayoutDashboard, Plus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 
 export default function Navbar() {
-  const { requestReset } = useContext(AppContext);
+  const { startNewTournament } = useContext(AppContext);
   const navigate = useNavigate();
 
   return (
@@ -16,12 +16,20 @@ export default function Navbar() {
         </h1>
       </Link>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
+        <Link
+          to="/dashboard"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-neutral-300 transition-all duration-300 hover:text-white hover:bg-neutral-800"
+        >
+          <LayoutDashboard size={16} />
+          Dashboard
+        </Link>
         <Link
           to="/create"
           onClick={(e) => {
             e.preventDefault();
-            requestReset(() => navigate("/create"));
+            startNewTournament();
+            navigate("/create");
           }}
           className="flex items-center gap-0.5 bg-blue-500 px-2 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95"
         >

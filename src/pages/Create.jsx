@@ -5,29 +5,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { AppContext } from "../context/AppContext";
 import { generateBracket } from "../utils/bracket";
 import { generateRoundRobin } from "../utils/roundRobin";
+import { containerVariants, itemVariants } from "../utils/motionVariants";
 import { Link } from "react-router-dom";
-
-const containerVariants = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.25,
-      when: "beforeChildren",
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" },
-  },
-};
 
 export default function Create() {
   const {
@@ -37,7 +16,7 @@ export default function Create() {
     setErr,
     players,
     setPlayers,
-    setRounds,
+    generateFixtures,
     format,
     setFormat,
     mode,
@@ -64,16 +43,16 @@ export default function Create() {
     });
   }
 
-  function generateFixtures(event, players) {
+  function handleGenerateFixtures(event, players) {
     if (players.some((player) => player.name.trim() === "")) {
       event.preventDefault();
       setErr("Please enter a name for every player");
       return;
     }
     if (format === "league") {
-      setRounds(generateRoundRobin(players, mode === "home_away"));
+      generateFixtures(generateRoundRobin(players, mode === "home_away"));
     } else {
-      setRounds(generateBracket(players));
+      generateFixtures(generateBracket(players));
     }
   }
 
@@ -224,7 +203,7 @@ export default function Create() {
           <motion.div layout variants={itemVariants}>
             <AnimatePresence>
               <Link
-                onClick={(e) => generateFixtures(e, players)}
+                onClick={(e) => handleGenerateFixtures(e, players)}
                 to="/fixtures"
                 className="flex items-center justify-center gap-0.5 bg-blue-500 px-10 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
               >

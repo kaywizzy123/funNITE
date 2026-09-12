@@ -2,9 +2,10 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
+import Dashboard from "./pages/Dashboard";
 import { AppProvider } from "./context/AppContext";
 import Fixtures from "./pages/Fixtures";
-import ResetConfirmModal from "./components/ResetConfirmModal";
+import DeleteConfirmModal from "./components/DeleteConfirmModal";
 
 export default function App() {
   return (
@@ -15,8 +16,9 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<Create />} />
           <Route path="/fixtures" element={<Fixtures />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
-        <ResetConfirmModal />
+        <DeleteConfirmModal />
       </div>
     </AppProvider>
   );

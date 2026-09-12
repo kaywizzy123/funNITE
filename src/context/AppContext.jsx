@@ -1,31 +1,63 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { advanceWinner } from "../utils/bracket";
-import { loadTournamentState, saveTournamentState } from "../utils/storage";
+import {
+  deleteTournamentById,
+  loadCurrentTournamentId,
+  loadTournaments,
+  saveCurrentTournamentId,
+  upsertTournament,
+} from "../utils/storage";
 
 // eslint-disable-next-line react-refresh/only-export-components -- context + provider kept together on purpose
 export const AppContext = createContext();
 
-export function AppProvider({ children }) {
-  const persisted = loadTournamentState();
+function defaultPlayers() {
+  return [
+    { id: crypto.randomUUID(), name: "" },
+    { id: crypto.randomUUID(), name: "" },
+    { id: crypto.randomUUID(), name: "" },
+  ];
+}
 
-  const [gameName, setGameName] = useState(persisted?.gameName ?? "");
+export function AppProvider({ children }) {
+  const [initialTournament] = useState(() => {
+    const id = loadCurrentTournamentId();
+    return loadTournaments().find((t) => t.id === id) ?? null;
+  });
+
+  const [currentTournamentId, setCurrentTournamentId] = useState(initialTournament?.id ?? null);
+  const [gameName, setGameName] = useState(initialTournament?.gameName ?? "");
   const [err, setErr] = useState("");
-  const [players, setPlayers] = useState(
-    persisted?.players ?? [
-      { id: crypto.randomUUID(), name: "" },
-      { id: crypto.randomUUID(), name: "" },
-      { id: crypto.randomUUID(), name: "" },
-    ],
-  );
-  const [rounds, setRounds] = useState(persisted?.rounds ?? []);
-  const [format, setFormat] = useState(persisted?.format ?? "knockout");
-  const [mode, setMode] = useState(persisted?.mode ?? "single");
-  const [resetModalOpen, setResetModalOpen] = useState(false);
-  const pendingResetRef = useRef(null);
+  const [players, setPlayers] = useState(initialTournament?.players ?? defaultPlayers());
+  const [rounds, setRounds] = useState(initialTournament?.rounds ?? []);
+  const [format, setFormat] = useState(initialTournament?.format ?? "knockout");
+  const [mode, setMode] = useState(initialTournament?.mode ?? "single");
+  const createdAtRef = useRef(initialTournament?.createdAt ?? null);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const pendingDeleteIdRef = useRef(null);
+  const pendingConfirmRef = useRef(null);
 
   useEffect(() => {
-    saveTournamentState({ gameName, players, rounds, format, mode });
-  }, [gameName, players, rounds, format, mode]);
+    saveCurrentTournamentId(currentTournamentId);
+  }, [currentTournamentId]);
+
+  // Autosave the working fields to storage once a tournament actually
+  // exists (i.e. has an id). Nothing is written while the user is still
+  // filling out a brand-new /create form with no id yet.
+  useEffect(() => {
+    if (!currentTournamentId) return;
+    upsertTournament({
+      id: currentTournamentId,
+      gameName,
+      players,
+      rounds,
+      format,
+      mode,
+      createdAt: createdAtRef.current ?? new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+  }, [currentTournamentId, gameName, players, rounds, format, mode]);
 
   function submitMatchResult(roundIndex, matchIndex, scoreHome, scoreAway) {
     if (format !== "league") {
@@ -57,38 +89,64 @@ export function AppProvider({ children }) {
     });
   }
 
-  function resetTournament() {
+  // Called by Create.jsx instead of setRounds directly. Mints an id on the
+  // first save (rounds [] -> non-empty); preserves an already-loaded id
+  // (e.g. resuming a draft and generating its fixtures for the first time).
+  function generateFixtures(newRounds) {
+    setCurrentTournamentId((prev) => {
+      if (prev) return prev;
+      createdAtRef.current = new Date().toISOString();
+      return crypto.randomUUID();
+    });
+    setRounds(newRounds);
+  }
+
+  function loadTournament(tournament) {
+    setGameName(tournament.gameName ?? "");
+    setPlayers(tournament.players ?? defaultPlayers());
+    setRounds(tournament.rounds ?? []);
+    setFormat(tournament.format ?? "knockout");
+    setMode(tournament.mode ?? "single");
+    createdAtRef.current = tournament.createdAt ?? new Date().toISOString();
+    setCurrentTournamentId(tournament.id);
+  }
+
+  function startNewTournament() {
     setGameName("");
-    setPlayers([
-      { id: crypto.randomUUID(), name: "" },
-      { id: crypto.randomUUID(), name: "" },
-      { id: crypto.randomUUID(), name: "" },
-    ]);
+    setPlayers(defaultPlayers());
     setRounds([]);
     setFormat("knockout");
     setMode("single");
+    createdAtRef.current = null;
+    setCurrentTournamentId(null);
   }
 
-  function requestReset(onConfirmed) {
-    if (rounds.length === 0) {
-      resetTournament();
-      onConfirmed?.();
-      return;
+  function deleteTournament(id) {
+    deleteTournamentById(id);
+    if (id === currentTournamentId) {
+      startNewTournament();
     }
-    pendingResetRef.current = onConfirmed;
-    setResetModalOpen(true);
   }
 
-  function confirmResetModal() {
-    resetTournament();
-    setResetModalOpen(false);
-    pendingResetRef.current?.();
-    pendingResetRef.current = null;
+  function requestDeleteTournament(id, onConfirmed) {
+    pendingDeleteIdRef.current = id;
+    pendingConfirmRef.current = onConfirmed;
+    setDeleteModalOpen(true);
   }
 
-  function cancelResetModal() {
-    setResetModalOpen(false);
-    pendingResetRef.current = null;
+  function confirmDeleteTournament() {
+    const id = pendingDeleteIdRef.current;
+    if (id) deleteTournament(id);
+    setDeleteModalOpen(false);
+    pendingConfirmRef.current?.();
+    pendingDeleteIdRef.current = null;
+    pendingConfirmRef.current = null;
+  }
+
+  function cancelDeleteModal() {
+    setDeleteModalOpen(false);
+    pendingDeleteIdRef.current = null;
+    pendingConfirmRef.current = null;
   }
 
   return (
@@ -101,16 +159,20 @@ export function AppProvider({ children }) {
         players,
         setPlayers,
         rounds,
-        setRounds,
         format,
         setFormat,
         mode,
         setMode,
         submitMatchResult,
-        requestReset,
-        resetModalOpen,
-        confirmResetModal,
-        cancelResetModal,
+        currentTournamentId,
+        generateFixtures,
+        loadTournament,
+        startNewTournament,
+        deleteTournament,
+        deleteModalOpen,
+        requestDeleteTournament,
+        confirmDeleteTournament,
+        cancelDeleteModal,
       }}
     >
       {children}

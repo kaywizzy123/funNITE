@@ -1,47 +1,28 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { getRoundLabel } from "../utils/bracket";
 import { getMatchdayLabel } from "../utils/roundRobin";
-import { computeStandings, isLeagueComplete } from "../utils/standings";
+import { computeStandings } from "../utils/standings";
+import { getTournamentChampion } from "../utils/tournamentStatus";
+import { containerVariants, itemVariants } from "../utils/motionVariants";
 import FixtureCard from "../components/FixtureCard";
 import StandingsTable from "../components/StandingsTable";
 
 export default function Fixtures() {
-  const { gameName, rounds, submitMatchResult, format, requestReset } =
-    useContext(AppContext);
+  const {
+    gameName,
+    rounds,
+    submitMatchResult,
+    format,
+    currentTournamentId,
+    requestDeleteTournament,
+  } = useContext(AppContext);
   const navigate = useNavigate();
   const isLeague = format === "league";
-  const finalMatch = rounds.at(-1)?.[0];
   const standings = isLeague ? computeStandings(rounds) : [];
-  const champion = isLeague
-    ? isLeagueComplete(rounds)
-      ? standings[0]?.player
-      : null
-    : finalMatch?.winner;
-
-  const containerVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.25,
-        when: "beforeChildren",
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
+  const champion = getTournamentChampion({ format, rounds });
 
   return (
     <div className="flex justify-center flex-1 text-center mx-2 md:mx-0">
@@ -64,14 +45,26 @@ export default function Fixtures() {
           >
             Fixtures
           </motion.h2>
-          <motion.button
+          <motion.div
             variants={itemVariants}
-            type="button"
-            onClick={() => requestReset(() => navigate("/create"))}
-            className="text-sm text-red-400 hover:text-red-300 transition-colors"
+            className="flex items-center gap-4"
           >
-            Reset Tournament
-          </motion.button>
+            <Link
+              to="/dashboard"
+              className="text-sm text-neutral-400 hover:text-white transition-colors"
+            >
+              ← Back to Dashboard
+            </Link>
+            <button
+              type="button"
+              onClick={() =>
+                requestDeleteTournament(currentTournamentId, () => navigate("/create"))
+              }
+              className="text-sm text-red-400 hover:text-red-300 transition-colors"
+            >
+              Delete Tournament
+            </button>
+          </motion.div>
           <motion.div
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"

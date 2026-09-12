@@ -27,7 +27,7 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const { requestReset } = useContext(AppContext);
+  const { startNewTournament } = useContext(AppContext);
   const navigate = useNavigate();
 
   return (
@@ -95,7 +95,8 @@ export default function Home() {
               to="/create"
               onClick={(e) => {
                 e.preventDefault();
-                requestReset(() => navigate("/create"));
+                startNewTournament();
+                navigate("/create");
               }}
               className="flex items-center gap-0.5 bg-blue-500 px-15 py-3.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95 text-2xl"
             >

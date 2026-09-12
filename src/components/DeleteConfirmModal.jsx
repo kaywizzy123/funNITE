@@ -17,18 +17,18 @@ const cardVariants = {
   },
 };
 
-export default function ResetConfirmModal() {
-  const { resetModalOpen, confirmResetModal, cancelResetModal } = useContext(AppContext);
+export default function DeleteConfirmModal() {
+  const { deleteModalOpen, confirmDeleteTournament, cancelDeleteModal } = useContext(AppContext);
 
   return (
     <AnimatePresence>
-      {resetModalOpen && (
+      {deleteModalOpen && (
         <motion.div
           variants={backdropVariants}
           initial="hidden"
           animate="visible"
           exit="hidden"
-          onClick={cancelResetModal}
+          onClick={cancelDeleteModal}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4"
         >
           <motion.div
@@ -39,25 +39,25 @@ export default function ResetConfirmModal() {
             onClick={(e) => e.stopPropagation()}
             className="flex flex-col gap-4 w-full max-w-sm bg-neutral-900 border border-neutral-500/30 rounded-2xl p-6 text-center"
           >
-            <h3 className="text-xl font-bold">Start a new tournament?</h3>
+            <h3 className="text-xl font-bold">Delete this tournament?</h3>
             <p className="text-sm text-neutral-400">
-              This will clear the current one, including any scores already
-              entered.
+              This will permanently remove it, including all fixtures and
+              results. This can&apos;t be undone.
             </p>
             <div className="flex justify-center gap-3 mt-2">
               <button
                 type="button"
-                onClick={cancelResetModal}
+                onClick={cancelDeleteModal}
                 className="bg-neutral-700 rounded-full px-5 py-2 transition-all duration-300 hover:bg-neutral-600 active:scale-95"
               >
                 Cancel
               </button>
               <button
                 type="button"
-                onClick={confirmResetModal}
+                onClick={confirmDeleteTournament}
                 className="bg-red-500 rounded-full px-5 py-2 text-white transition-all duration-300 hover:bg-red-600 active:scale-95"
               >
-                Reset
+                Delete
               </button>
             </div>
           </motion.div>
