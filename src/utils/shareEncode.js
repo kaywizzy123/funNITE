@@ -8,8 +8,8 @@ function base64UrlDecode(str) {
   return atob(padded + padding);
 }
 
-export function encodeShareData({ gameName, format, mode, rounds }) {
-  const json = JSON.stringify({ gameName, format, mode, rounds });
+export function encodeShareData({ gameName, format, mode, rounds, losersRounds, grandFinal }) {
+  const json = JSON.stringify({ gameName, format, mode, rounds, losersRounds, grandFinal });
   return base64UrlEncode(encodeURIComponent(json));
 }
 

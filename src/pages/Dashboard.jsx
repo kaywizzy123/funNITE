@@ -144,7 +144,11 @@ export default function Dashboard() {
                         </span>
                       </div>
                       <p className="text-sm text-neutral-400">
-                        {tournament.format === "league" ? "League" : "Knockout"}{" "}
+                        {tournament.format === "league"
+                          ? "League"
+                          : tournament.format === "double_elim"
+                            ? "Double Elimination"
+                            : "Knockout"}{" "}
                         · {tournament.players?.length ?? 0} players
                       </p>
                       {champion && (

@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { AppContext } from "../context/AppContext";
 import { generateBracket } from "../utils/bracket";
 import { generateRoundRobin } from "../utils/roundRobin";
+import { generateDoubleElimination } from "../utils/doubleElim";
 import { containerVariants, itemVariants } from "../utils/motionVariants";
 import { Link } from "react-router-dom";
 
@@ -58,6 +59,9 @@ export default function Create() {
     }
     if (format === "league") {
       generateFixtures(generateRoundRobin(players, mode === "home_away"));
+    } else if (format === "double_elim") {
+      const { winnersRounds, losersRounds, grandFinal } = generateDoubleElimination(players);
+      generateFixtures(winnersRounds, { losersRounds, grandFinal });
     } else {
       generateFixtures(generateBracket(players));
     }
@@ -100,6 +104,7 @@ export default function Create() {
                       className="w-full appearance-none rounded-full bg-blue-500 px-4 py-2.5 pr-10 text-sm text-neutral-50 shadow-sm transition-all focus:border-none focus:outline-none focus:ring-0 focus:ring-indigo-100"
                     >
                       <option value="knockout">Knockout</option>
+                      <option value="double_elim">Double Elimination</option>
                       <option value="league">League</option>
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-50">
