@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plus, Trash2, Trophy } from "lucide-react";
+import { Trash2, Trophy } from "lucide-react";
 import { AppContext } from "../context/AppContext";
 import { loadTournaments } from "../utils/storage";
 import {
@@ -41,7 +41,8 @@ function formatDate(iso) {
 }
 
 export default function Dashboard() {
-  const { loadTournament, requestDeleteTournament } = useContext(AppContext);
+  const { loadTournament, startNewTournament, requestDeleteTournament } =
+    useContext(AppContext);
   const [tournaments, setTournaments] = useState(loadTournaments);
   const navigate = useNavigate();
 
@@ -52,6 +53,11 @@ export default function Dashboard() {
       ),
     [tournaments],
   );
+
+  function handleCreateNew() {
+    startNewTournament();
+    navigate("/create");
+  }
 
   function handleOpen(tournament) {
     loadTournament(tournament);
