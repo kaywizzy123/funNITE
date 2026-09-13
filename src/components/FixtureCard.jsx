@@ -22,7 +22,8 @@ export default function FixtureCard({
   const [inputHome, setInputHome] = useState(scoreHome ?? "");
   const [inputAway, setInputAway] = useState(scoreAway ?? "");
   const [tied, setTied] = useState(false);
-  const isPending = !playerHome || !playerAway;
+  const isBye = playerHome?.name === "Bye" || playerAway?.name === "Bye";
+  const isPending = !playerHome || !playerAway || isBye;
 
   function handleSubmit() {
     if (inputHome === "" || inputAway === "") return;
