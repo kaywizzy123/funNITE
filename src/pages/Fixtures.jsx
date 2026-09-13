@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Check, Pencil, X } from "lucide-react";
 import { AppContext } from "../context/AppContext";
@@ -7,9 +7,11 @@ import { getRoundLabel } from "../utils/bracket";
 import { getMatchdayLabel } from "../utils/roundRobin";
 import { computeStandings } from "../utils/standings";
 import { getTournamentChampion } from "../utils/tournamentStatus";
+import { encodeShareData } from "../utils/shareEncode";
 import { containerVariants, itemVariants } from "../utils/motionVariants";
 import FixtureCard from "../components/FixtureCard";
 import StandingsTable from "../components/StandingsTable";
+import ShareMenu from "../components/ShareMenu";
 
 export default function Fixtures() {
   const {
@@ -18,6 +20,7 @@ export default function Fixtures() {
     rounds,
     submitMatchResult,
     format,
+    mode,
     currentTournamentId,
     requestDeleteTournament,
   } = useContext(AppContext);
@@ -25,6 +28,7 @@ export default function Fixtures() {
   const isLeague = format === "league";
   const standings = isLeague ? computeStandings(rounds) : [];
   const champion = getTournamentChampion({ format, rounds });
+  const resultsRef = useRef(null);
 
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState(gameName);
@@ -127,8 +131,16 @@ export default function Fixtures() {
             >
               Delete Tournament
             </button>
+            <ShareMenu
+              targetRef={resultsRef}
+              getShareUrl={() =>
+                `${window.location.origin}/share/${encodeShareData({ gameName, format, mode, rounds })}`
+              }
+              fileName={gameName || "tournament-results"}
+            />
           </motion.div>
           <motion.div
+            ref={resultsRef}
             variants={itemVariants}
             className="w-full  border rounded-2xl border-neutral-500/20 flex flex-col gap-4 overflow-auto p-4"
           >

@@ -18,6 +18,7 @@ export default function FixtureCard({
   scoreAway,
   onSubmit,
   allowTies = false,
+  readOnly = false,
 }) {
   const [inputHome, setInputHome] = useState(scoreHome ?? "");
   const [inputAway, setInputAway] = useState(scoreAway ?? "");
@@ -76,33 +77,41 @@ export default function FixtureCard({
         </div>
       </div>
 
-      <div className="order-2 flex flex-col md:flex-row justify-center items-center gap-2 shrink-0 self-center bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2 px-3">
-        <input
-          className="w-9 h-9 text-center font-semibold bg-neutral-800/60 border border-neutral-500/40 rounded-xl outline-none transition-shadow focus:ring-1 focus:ring-blue-500 disabled:opacity-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          type="number"
-          value={inputHome}
-          disabled={isPending}
-          onChange={(e) => setInputHome(e.target.value)}
-        />
-        <p className="text-neutral-500 font-semibold">-</p>
-        <input
-          className="w-9 h-9 text-center font-semibold bg-neutral-800/60 border border-neutral-500/40 rounded-xl outline-none transition-shadow focus:ring-1 focus:ring-blue-500 disabled:opacity-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-          type="number"
-          value={inputAway}
-          disabled={isPending}
-          onChange={(e) => setInputAway(e.target.value)}
-        />
-        {!isPending && (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={inputHome === "" || inputAway === ""}
-            className="flex shrink-0 justify-center items-center w-8 h-8 rounded-full bg-blue-500 text-white transition-all hover:bg-blue-400 active:scale-95 disabled:opacity-40 disabled:hover:bg-blue-500"
-          >
-            <Check size={16} />
-          </button>
-        )}
-      </div>
+      {readOnly ? (
+        <div className="order-2 flex justify-center items-center gap-2 shrink-0 self-center bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2 px-4 font-semibold">
+          <span>{isPending ? "-" : (scoreHome ?? "-")}</span>
+          <span className="text-neutral-500">-</span>
+          <span>{isPending ? "-" : (scoreAway ?? "-")}</span>
+        </div>
+      ) : (
+        <div className="order-2 flex flex-col md:flex-row justify-center items-center gap-2 shrink-0 self-center bg-neutral-950 border border-neutral-500/40 rounded-2xl py-2 px-3">
+          <input
+            className="w-9 h-9 text-center font-semibold bg-neutral-800/60 border border-neutral-500/40 rounded-xl outline-none transition-shadow focus:ring-1 focus:ring-blue-500 disabled:opacity-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            type="number"
+            value={inputHome}
+            disabled={isPending}
+            onChange={(e) => setInputHome(e.target.value)}
+          />
+          <p className="text-neutral-500 font-semibold">-</p>
+          <input
+            className="w-9 h-9 text-center font-semibold bg-neutral-800/60 border border-neutral-500/40 rounded-xl outline-none transition-shadow focus:ring-1 focus:ring-blue-500 disabled:opacity-40 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            type="number"
+            value={inputAway}
+            disabled={isPending}
+            onChange={(e) => setInputAway(e.target.value)}
+          />
+          {!isPending && (
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={inputHome === "" || inputAway === ""}
+              className="flex shrink-0 justify-center items-center w-8 h-8 rounded-full bg-blue-500 text-white transition-all hover:bg-blue-400 active:scale-95 disabled:opacity-40 disabled:hover:bg-blue-500"
+            >
+              <Check size={16} />
+            </button>
+          )}
+        </div>
+      )}
       {tied && (
         <p className="text-red-400 text-xs">Scores can&apos;t be tied &mdash; enter a winner</p>
       )}

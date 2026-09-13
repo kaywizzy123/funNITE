@@ -5,6 +5,7 @@ import Create from "./pages/Create";
 import Dashboard from "./pages/Dashboard";
 import { AppProvider } from "./context/AppContext";
 import Fixtures from "./pages/Fixtures";
+import SharedView from "./pages/SharedView";
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/create" element={<Create />} />
           <Route path="/fixtures" element={<Fixtures />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/share/:encoded" element={<SharedView />} />
         </Routes>
         <DeleteConfirmModal />
       </div>
