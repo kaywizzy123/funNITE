@@ -41,8 +41,7 @@ function formatDate(iso) {
 }
 
 export default function Dashboard() {
-  const { loadTournament, startNewTournament, requestDeleteTournament } =
-    useContext(AppContext);
+  const { loadTournament, requestDeleteTournament } = useContext(AppContext);
   const [tournaments, setTournaments] = useState(loadTournaments);
   const navigate = useNavigate();
 
@@ -53,11 +52,6 @@ export default function Dashboard() {
       ),
     [tournaments],
   );
-
-  function handleCreateNew() {
-    startNewTournament();
-    navigate("/create");
-  }
 
   function handleOpen(tournament) {
     loadTournament(tournament);
@@ -86,14 +80,9 @@ export default function Dashboard() {
             variants={itemVariants}
             className="flex w-full justify-between items-center"
           >
-            <h1 className="text-3xl md:text-5xl font-bold">Dashboard</h1>
-            <button
-              type="button"
-              onClick={handleCreateNew}
-              className="flex items-center gap-1 bg-blue-500 px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              <Plus size={16} /> Create New
-            </button>
+            <h1 className="text-3xl md:text-5xl w-full text-center font-bold">
+              Dashboard
+            </h1>
           </motion.div>
 
           {sorted.length === 0 ? (
@@ -131,7 +120,9 @@ export default function Dashboard() {
                     <motion.div
                       key={tournament.id}
                       layout
-                      transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
+                      transition={{
+                        layout: { duration: 0.3, ease: "easeInOut" },
+                      }}
                       variants={itemVariants}
                       onClick={() => handleOpen(tournament)}
                       className="text-left cursor-pointer bg-neutral-700/10 border border-neutral-500/20 rounded-2xl p-4 flex flex-col gap-2 transition-colors duration-300 hover:border-blue-500/50"
