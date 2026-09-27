@@ -24,6 +24,7 @@ Add your players, pick a format, and funNITE draws the fixtures, advances winner
 - [Project structure](#project-structure)
 - [How it works](#how-it-works)
 - [Roadmap ideas](#roadmap-ideas)
+- [License](#license)
 
 ---
 
@@ -242,6 +243,12 @@ Share links need no backend. The tournament's name, format, mode, and results ar
 - Player stats across tournaments
 - Cloud sync / accounts
 - Export fixtures to CSV
+
+---
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
