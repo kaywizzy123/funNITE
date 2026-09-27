@@ -27,7 +27,13 @@ export function generateBracket(players) {
   let cursor = 0;
   for (let i = 0; i < byesNeeded; i++) {
     const playerHome = shuffled[cursor++];
-    round1.push(createMatch(playerHome, { id: crypto.randomUUID(), name: "Bye", avatar: null }, playerHome));
+    round1.push(
+      createMatch(
+        playerHome,
+        { id: crypto.randomUUID(), name: "Bye", avatar: null },
+        playerHome,
+      ),
+    );
   }
   for (let i = byesNeeded; i < numMatches; i++) {
     round1.push(createMatch(shuffled[cursor++], shuffled[cursor++]));
@@ -46,7 +52,9 @@ export function generateBracket(players) {
 }
 
 export function advanceWinner(rounds, roundIndex, matchIndex, winner) {
-  const nextRounds = rounds.map((round) => round.map((match) => ({ ...match })));
+  const nextRounds = rounds.map((round) =>
+    round.map((match) => ({ ...match })),
+  );
   nextRounds[roundIndex][matchIndex].winner = winner;
   placeWinner(nextRounds, roundIndex, matchIndex, winner);
   return nextRounds;
