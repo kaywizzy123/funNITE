@@ -1,6 +1,7 @@
 const TOURNAMENTS_KEY = "funnite:tournaments";
 const CURRENT_ID_KEY = "funnite:currentTournamentId";
 const LEGACY_KEY = "funnite:tournament";
+const NEW_DRAFT_KEY = "funnite:newTournamentDraft";
 
 function readTournamentsRaw() {
   try {
@@ -97,6 +98,36 @@ export function saveCurrentTournamentId(id) {
   try {
     if (id) localStorage.setItem(CURRENT_ID_KEY, id);
     else localStorage.removeItem(CURRENT_ID_KEY);
+  } catch {
+    // ignore
+  }
+}
+
+// The /create form for a brand-new tournament (no id yet) lives under its
+// own key so a refresh doesn't wipe it, without cluttering the dashboard
+// with a tournament entry for every half-filled form.
+export function loadNewTournamentDraft() {
+  try {
+    const raw = localStorage.getItem(NEW_DRAFT_KEY);
+    const draft = raw ? JSON.parse(raw) : null;
+    if (!draft || !Array.isArray(draft.players) || draft.players.length === 0) return null;
+    return draft;
+  } catch {
+    return null;
+  }
+}
+
+export function saveNewTournamentDraft(draft) {
+  try {
+    localStorage.setItem(NEW_DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // ignore
+  }
+}
+
+export function clearNewTournamentDraft() {
+  try {
+    localStorage.removeItem(NEW_DRAFT_KEY);
   } catch {
     // ignore
   }

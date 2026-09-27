@@ -7,10 +7,13 @@ import {
 } from "../utils/doubleElim";
 import { createMatch } from "../utils/matchHelpers";
 import {
+  clearNewTournamentDraft,
   deleteTournamentById,
   loadCurrentTournamentId,
+  loadNewTournamentDraft,
   loadTournaments,
   saveCurrentTournamentId,
+  saveNewTournamentDraft,
   upsertTournament,
 } from "../utils/storage";
 
@@ -30,16 +33,20 @@ export function AppProvider({ children }) {
     const id = loadCurrentTournamentId();
     return loadTournaments().find((t) => t.id === id) ?? null;
   });
+  // No saved tournament to resume -> restore a half-filled /create form, if any.
+  const [initialDraft] = useState(() => (initialTournament ? null : loadNewTournamentDraft()));
 
   const [currentTournamentId, setCurrentTournamentId] = useState(initialTournament?.id ?? null);
-  const [gameName, setGameName] = useState(initialTournament?.gameName ?? "");
+  const [gameName, setGameName] = useState(initialTournament?.gameName ?? initialDraft?.gameName ?? "");
   const [err, setErr] = useState("");
-  const [players, setPlayers] = useState(initialTournament?.players ?? defaultPlayers());
+  const [players, setPlayers] = useState(
+    initialTournament?.players ?? initialDraft?.players ?? defaultPlayers(),
+  );
   const [rounds, setRounds] = useState(initialTournament?.rounds ?? []);
   const [losersRounds, setLosersRounds] = useState(initialTournament?.losersRounds ?? []);
   const [grandFinal, setGrandFinal] = useState(initialTournament?.grandFinal ?? null);
-  const [format, setFormat] = useState(initialTournament?.format ?? "knockout");
-  const [mode, setMode] = useState(initialTournament?.mode ?? "single");
+  const [format, setFormat] = useState(initialTournament?.format ?? initialDraft?.format ?? "knockout");
+  const [mode, setMode] = useState(initialTournament?.mode ?? initialDraft?.mode ?? "single");
   const createdAtRef = useRef(initialTournament?.createdAt ?? null);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -50,9 +57,19 @@ export function AppProvider({ children }) {
     saveCurrentTournamentId(currentTournamentId);
   }, [currentTournamentId]);
 
+  // A brand-new /create form (no id yet) is kept under its own draft key so
+  // a refresh doesn't lose it. Once the tournament gets an id it is saved
+  // with the rest below, so the standalone draft is dropped.
+  useEffect(() => {
+    if (currentTournamentId) {
+      clearNewTournamentDraft();
+      return;
+    }
+    saveNewTournamentDraft({ gameName, players, format, mode });
+  }, [currentTournamentId, gameName, players, format, mode]);
+
   // Autosave the working fields to storage once a tournament actually
-  // exists (i.e. has an id). Nothing is written while the user is still
-  // filling out a brand-new /create form with no id yet.
+  // exists (i.e. has an id).
   useEffect(() => {
     if (!currentTournamentId) return;
     upsertTournament({

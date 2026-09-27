@@ -218,6 +218,7 @@ State lives in `AppContext`. When fixtures are generated for the first time, the
 
 - `funnite:tournaments`: array of all saved tournaments
 - `funnite:currentTournamentId`: the tournament to reopen on refresh
+- `funnite:newTournamentDraft`: a half-filled Create form, so a refresh doesn't lose it (cleared once fixtures are generated)
 
 Because data is stored in the browser, tournaments are tied to one device and browser. Clearing site data deletes them.
 
