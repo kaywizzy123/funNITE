@@ -4,6 +4,8 @@
 
 **Ditch the paper. Track the bragging rights.**
 
+**[▶ Try it live: fun-nite.vercel.app](https://fun-nite.vercel.app)**
+
 A fixtures generator and scoreboard for local gaming nights: FIFA, Tekken, Smash, chess, or anything else your group plays.
 Add your players, pick a format, and funNITE draws the fixtures, advances winners, keeps the league table up to date, and crowns a champion.
 
@@ -227,7 +229,7 @@ Because data is stored in the browser, tournaments are tied to one device and br
 
 Share links need no backend. The tournament's name, format, mode, and results are serialized to JSON and **base64url-encoded into the URL** (`/share/<encoded>`). `SharedView` decodes the data and renders it read-only. Large tournaments produce long URLs.
 
-> **Deploying?** Because the app uses client-side routing, set up your host to serve `index.html` for all paths (an SPA fallback). Without it, share links and page refreshes on routes like `/dashboard` will return a 404.
+> **Deploying?** Because the app uses client-side routing, the host must serve `index.html` for every path (an SPA fallback). On Vercel, the included [`vercel.json`](vercel.json) handles this. On other hosts, set up the equivalent, or share links and page refreshes on routes like `/dashboard` will return a 404.
 
 ### Brackets
 
