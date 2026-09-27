@@ -69,7 +69,7 @@ export default function Home() {
             variants={itemVariants}
             className="text-3xl md:text-5xl text-blue-300"
           >
-            The Ultimate AI Powered Fixtures Generator
+            The Ultimate Game Night Fixtures Generator
           </motion.h2>
           <motion.h3
             variants={itemVariants}
@@ -82,13 +82,13 @@ export default function Home() {
             className="text-sm md:text-md text-neutral-500"
           >
             Generate Instant game fixtures, live round-robin pairings, and
-            automatedd couch leaderboards for your local gaming nights
+            automated couch leaderboards for your local gaming nights
           </motion.p>
           <motion.p
             variants={itemVariants}
             className="text-sm md:text-md text-neutral-600"
           >
-            Leave the planning to AI, Focus on the game and have fun.
+            Leave the planning to us. Focus on the game and have fun.
           </motion.p>
           <motion.div variants={itemVariants}>
             <Link

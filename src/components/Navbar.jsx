@@ -11,7 +11,7 @@ export default function Navbar() {
     <nav className="w-full h-14 flex justify-between px-2 sm:px-20 border-b border-b-neutral-600/20">
       <Link to="/" className="flex items-center gap-1">
         <Gamepad2 className="text-blue-500" />
-        <h1 className="font-bold text-3xl text-blue-200">
+        <h1 className="font-bold text-2xl sm:text-3xl text-blue-200">
           fun<span className="text-blue-500">NITE</span>
         </h1>
       </Link>
@@ -19,10 +19,11 @@ export default function Navbar() {
       <div className="flex items-center gap-2">
         <Link
           to="/dashboard"
-          className="flex items-center gap-1 px-3 py-1.5 rounded-full text-neutral-300 transition-all duration-300 hover:text-white hover:bg-neutral-800"
+          aria-label="Dashboard"
+          className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full text-neutral-300 transition-all duration-300 hover:text-white hover:bg-neutral-800"
         >
           <LayoutDashboard size={16} />
-          Dashboard
+          <span className="hidden sm:inline">Dashboard</span>
         </Link>
         <Link
           to="/create"
@@ -31,7 +32,7 @@ export default function Navbar() {
             startNewTournament();
             navigate("/create");
           }}
-          className="flex items-center gap-0.5 bg-blue-500 px-2 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95"
+          className="flex items-center gap-0.5 whitespace-nowrap bg-blue-500 px-3 py-1.5 rounded-4xl transition-all duration-300 hover:scale-105 active:scale-95"
         >
           <Plus size={16} />
           Create new
